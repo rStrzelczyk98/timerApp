@@ -9,6 +9,12 @@ import { AppComponent } from './app.component';
 })
 export class MockNavigation {}
 
+@Component({
+  selector: 'app-timer-form',
+  template: '',
+})
+export class MockTimerForm {}
+
 describe('AppComponent', () => {
   let app: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -16,7 +22,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, MockNavigation],
+      declarations: [AppComponent, MockNavigation, MockTimerForm],
     });
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
@@ -35,5 +41,11 @@ describe('AppComponent', () => {
     const nav =
       fixture.debugElement.nativeElement.querySelector('app-navigation');
     expect(nav).toBeTruthy();
+  });
+
+  it('should render form component', () => {
+    const form =
+      fixture.debugElement.nativeElement.querySelector('app-timer-form');
+    expect(form).toBeTruthy();
   });
 });

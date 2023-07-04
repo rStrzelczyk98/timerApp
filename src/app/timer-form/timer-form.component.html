@@ -1,0 +1,26 @@
+<form class="p-3" [formGroup]="timerForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="w-100" appearance="outline">
+    <mat-label>Label</mat-label>
+    <input matInput formControlName="label" placeholder="ex. Chicken in the oven">
+  </mat-form-field>
+
+  <div class="d-flex">
+    <mat-form-field appearance="outline">
+      <mat-label>Hours</mat-label>
+      <input matInput formControlName="hours" placeholder="00">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Minutes</mat-label>
+      <input matInput formControlName="minutes" placeholder="00">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Seconds</mat-label>
+      <input matInput formControlName="seconds" placeholder="00">
+    </mat-form-field>
+  </div>
+
+  <button class="w-100" mat-raised-button color="primary" type="submit" [disabled]="timerForm.invalid">Add
+    Timer</button>
+</form>
