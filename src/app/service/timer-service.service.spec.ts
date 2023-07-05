@@ -20,14 +20,15 @@ describe('TimerService', () => {
     });
   });
 
-  it('should call addTimer()', () => {
-    spyOn(service, 'addTimer');
+  it('should have array with one element', () => {
     service.addTimer({
       label: null,
       hours: null,
       minutes: null,
       seconds: null,
     });
-    expect(service.addTimer).toHaveBeenCalled();
+    service.getTimers().subscribe((array) => {
+      expect(array.length).toEqual(1);
+    });
   });
 });

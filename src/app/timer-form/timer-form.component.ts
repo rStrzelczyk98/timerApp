@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
+  FormBuilder,
   FormGroup,
   ValidationErrors,
   ValidatorFn,
+  Validators,
 } from '@angular/forms';
 import { Timer, TimerService } from '../service/timer-service.service';
 import { Observable } from 'rxjs';
@@ -18,28 +19,8 @@ export class TimerFormComponent {
   timerForm!: FormGroup;
   timers$!: Observable<Timer[]>;
 
-  constructor(private timerService: TimerService) {
-    this.timerForm = new FormGroup(
-      {
-        label: new FormControl(null),
-        hours: new FormControl(null, [
-          this.typeValidator(),
-          this.minValue(),
-          this.maxValue(999),
-        ]),
-        minutes: new FormControl(null, [
-          this.typeValidator(),
-          this.minValue(),
-          this.maxValue(60),
-        ]),
-        seconds: new FormControl(null, [
-          this.typeValidator(),
-          this.minValue(),
-          this.maxValue(60),
-        ]),
-      },
-      this.validValues()
-    );
+  constructor(private fb: FormBuilder, private timerService: TimerService) {
+    this.createForm();
     this.timers$ = this.timerService.getTimers();
   }
 
@@ -56,16 +37,6 @@ export class TimerFormComponent {
         : { invalidType: true };
   }
 
-  private maxValue(value: number): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>
-      control.value > value ? { maxValue: true } : null;
-  }
-
-  private minValue(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>
-      control.value < 0 ? { minValue: true } : null;
-  }
-
   private validValues(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null =>
       Object.values(control.value)
@@ -73,5 +44,24 @@ export class TimerFormComponent {
         .every((value) => !value)
         ? { noValidValues: true }
         : null;
+  }
+
+  private createForm() {
+    this.timerForm = this.fb.group({
+      label: null,
+      hours: [
+        null,
+        [this.typeValidator(), Validators.min(0), Validators.max(999)],
+      ],
+      minutes: [
+        null,
+        [this.typeValidator(), Validators.min(0), Validators.max(60)],
+      ],
+      seconds: [
+        null,
+        [this.typeValidator(), Validators.min(0), Validators.max(60)],
+      ],
+    });
+    this.timerForm.addValidators(this.validValues());
   }
 }
