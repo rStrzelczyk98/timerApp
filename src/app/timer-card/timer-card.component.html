@@ -6,10 +6,10 @@
         <i class="bi bi-x fs-2"></i>
       </button>
       <button mat-raised-button color="{{color}}" (click)="pauseTimer()">
-        <i class="fs-2" [ngClass]="color === 'warn' ? 'bi bi-pause' : 'bi bi-play-fill' "></i>
+        <i class="fs-2" [ngClass]="isPaused ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
       </button>
     </div>
   </div>
-  <p>{{time | timePipe}}</p>
+  <p>{{timeInSeconds | timePipe}}</p>
   <mat-progress-bar mode="determinate" value="97" color="accent"></mat-progress-bar>
 </div>

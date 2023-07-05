@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component } from '@angular/core';
 import { AppComponent } from './app.component';
-import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-timer-card',
@@ -19,7 +18,7 @@ export class MockNavigation {}
 describe('AppComponent', () => {
   let app: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
@@ -37,8 +36,8 @@ describe('AppComponent', () => {
   it(`should have as title 'timerApp'`, () => {
     expect(app.title).toEqual('timerApp');
   });
-  
-   it('should render navigation component', () => {
+
+  it('should render navigation component', () => {
     const nav =
       fixture.debugElement.nativeElement.querySelector('app-navigation');
     expect(nav).toBeTruthy();
@@ -48,5 +47,5 @@ describe('AppComponent', () => {
     const timerCard =
       fixture.debugElement.nativeElement.querySelector('app-timer-card');
     expect(timerCard).toBeTruthy();
- });
+  });
 });

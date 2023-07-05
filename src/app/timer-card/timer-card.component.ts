@@ -6,12 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./timer-card.component.scss'],
 })
 export class TimerCardComponent {
-  time: number = 585000;
+  timeInSeconds: number = 585;
   label: string = 'Label';
+  isPaused: Boolean = false;
   color: string = 'warn';
 
   pauseTimer() {
-    this.color = this.color === 'warn' ? 'primary' : 'warn';
+    this.isPaused = !this.isPaused;
+    this.color = this.isPaused ? 'primary' : 'warn';
     //functionality will be added with the rxjs streams implementation.
   }
   deleteTimer() {

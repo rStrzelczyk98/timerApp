@@ -13,7 +13,7 @@ describe('TimePipe', () => {
     expect(result).toEqual('00:00:00');
   });
   it('should return string: "12:34:56"', () => {
-    const result = pipe.transform(45296000);
+    const result = pipe.transform(45296);
     expect(result).toEqual('12:34:56');
   });
 });
