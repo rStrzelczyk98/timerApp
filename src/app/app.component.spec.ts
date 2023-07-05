@@ -15,6 +15,12 @@ export class MockTimerCard {}
 })
 export class MockNavigation {}
 
+@Component({
+  selector: 'app-timer-list',
+  template: '',
+})
+export class MockTimerList {}
+
 describe('AppComponent', () => {
   let app: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -22,7 +28,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, MockNavigation, MockTimerCard],
+      declarations: [AppComponent, MockNavigation, MockTimerList],
     });
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
@@ -43,9 +49,9 @@ describe('AppComponent', () => {
     expect(nav).toBeTruthy();
   });
 
-  it('should render timer card', () => {
-    const timerCard =
-      fixture.debugElement.nativeElement.querySelector('app-timer-card');
-    expect(timerCard).toBeTruthy();
+  it('should render timer list component', () => {
+    const list =
+      fixture.debugElement.nativeElement.querySelector('app-timer-list');
+    expect(list).toBeTruthy();
   });
 });
