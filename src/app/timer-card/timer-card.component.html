@@ -1,0 +1,15 @@
+<div class="p-3 card-bg text-white-50">
+  <div class="d-flex align-items-center">
+    <p class="m-0 fw-light">{{label}}</p>
+    <div class="ms-auto btn-group">
+      <button mat-raised-button color="basic" (click)="deleteTimer()">
+        <i class="bi bi-x fs-2"></i>
+      </button>
+      <button mat-raised-button color="{{color}}" (click)="pauseTimer()">
+        <i class="fs-2" [ngClass]="isPaused ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
+      </button>
+    </div>
+  </div>
+  <p>{{timeInSeconds | timePipe}}</p>
+  <mat-progress-bar mode="determinate" value="97" color="accent"></mat-progress-bar>
+</div>

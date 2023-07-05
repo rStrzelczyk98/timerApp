@@ -4,6 +4,12 @@ import { Component } from '@angular/core';
 import { AppComponent } from './app.component';
 
 @Component({
+  selector: 'app-timer-card',
+  template: '',
+})
+export class MockTimerCard {}
+
+@Component({
   selector: 'app-navigation',
   template: '',
 })
@@ -16,7 +22,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, MockNavigation],
+      declarations: [AppComponent, MockNavigation, MockTimerCard],
     });
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
@@ -35,5 +41,11 @@ describe('AppComponent', () => {
     const nav =
       fixture.debugElement.nativeElement.querySelector('app-navigation');
     expect(nav).toBeTruthy();
+  });
+
+  it('should render timer card', () => {
+    const timerCard =
+      fixture.debugElement.nativeElement.querySelector('app-timer-card');
+    expect(timerCard).toBeTruthy();
   });
 });
