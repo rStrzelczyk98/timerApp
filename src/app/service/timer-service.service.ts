@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, reduce, scan, tap } from 'rxjs';
+import { Subject, Observable, scan } from 'rxjs';
 
 export type Timer = {
   label: string | null;
@@ -12,15 +12,17 @@ export type Timer = {
   providedIn: 'root',
 })
 export class TimerService {
-  private timers$ = new BehaviorSubject<Timer[]>([]);
+  private timers$ = new Subject<Timer>();
 
   constructor() {}
 
   getTimers(): Observable<Timer[]> {
-    return this.timers$.asObservable();
+    return this.timers$.pipe(
+      scan((acc: Timer[], val: Timer) => [...acc, val], [])
+    );
   }
 
   addTimer(timer: Timer) {
-    this.timers$.next([...this.timers$.value, timer]);
+    this.timers$.next(timer);
   }
 }
