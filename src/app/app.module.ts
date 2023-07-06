@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TimerCardComponent } from './timer-card/timer-card.component';
 import { TimePipe } from './pipe/time.pipe';
+import { TimerListComponent } from './timer-list/timer-list.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { TimePipe } from './pipe/time.pipe';
     NavigationComponent,
     TimerCardComponent,
     TimePipe,
+    TimerListComponent,
   ],
   imports: [
     BrowserModule,
