@@ -26,7 +26,6 @@ export class MockTimerForm {}
 })
 export class MockTimerList {}
 
-
 describe('AppComponent', () => {
   let app: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -34,7 +33,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, MockNavigation, MockTimerForm, MockTimerList],
+      declarations: [AppComponent, MockNavigation],
     });
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
@@ -55,14 +54,9 @@ describe('AppComponent', () => {
     expect(nav).toBeTruthy();
   });
 
-  it('should render form component', () => {
-    const form =
-      fixture.debugElement.nativeElement.querySelector('app-timer-form');
-    expect(form).toBeTruthy();
-  });
-  it('should render timer list component', () => {
-    const list =
-      fixture.debugElement.nativeElement.querySelector('app-timer-list');
-    expect(list).toBeTruthy();
+  it('should render router-outlet', () => {
+    const router =
+      fixture.debugElement.nativeElement.querySelector('router-outlet');
+    expect(router).toBeTruthy();
   });
 });
