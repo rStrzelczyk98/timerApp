@@ -2,7 +2,7 @@
   <a id="list" mat-tab-link routerLink="" [active]="selected === 'list'" (click)="onClick('list')">
     <i class=" bi-list-task fs-2"></i>
   </a>
-  <a id="form" mat-tab-link routerLink="" [active]="selected !== 'list'" (click)="onClick('add-timer')">
+  <a id="form" mat-tab-link routerLink="add-timer" [active]="selected !== 'list'" (click)="onClick('add-timer')">
     <i class="bi bi-plus-lg fs-2"></i>
   </a>
 </nav>
