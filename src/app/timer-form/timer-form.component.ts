@@ -39,7 +39,7 @@ export class TimerFormComponent {
     return (control: AbstractControl): ValidationErrors | null =>
       Object.values(control.value)
         .slice(1)
-        .every((value) => !value)
+        .every((value) => !(Number(value) > 0))
         ? { noValidValues: true }
         : null;
   }
