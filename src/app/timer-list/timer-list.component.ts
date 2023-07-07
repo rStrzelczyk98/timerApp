@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Timer, TimerService } from '../service/timer-service.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-timer-list',
@@ -6,9 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./timer-list.component.scss'],
 })
 export class TimerListComponent {
-  testData = [
-    { id: 'timer-1', time: 10 },
-    { id: 'timer-2', time: 300 },
-    { id: 'timer-3', time: 600 },
-  ];
+  timers$: Observable<Timer[]>;
+  constructor(private ts: TimerService) {
+    this.timers$ = this.ts.getTimers();
+  }
 }

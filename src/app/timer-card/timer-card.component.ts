@@ -6,11 +6,9 @@ import {
   takeWhile,
   fromEvent,
   map,
-  switchMap,
-  NEVER,
   withLatestFrom,
   scan,
-  of,
+  filter,
 } from 'rxjs';
 
 export type Status = {
@@ -23,8 +21,8 @@ export type Status = {
 })
 export class TimerCardComponent implements AfterViewInit {
   @Input() timeInSeconds!: number;
-  @Input() id!: string;
-  label: string = 'Label';
+  @Input() id!: number;
+  @Input() label!: string;
   color: string = 'primary';
   isPaused: Boolean = true;
   isCompleted: Boolean = false;
@@ -35,7 +33,7 @@ export class TimerCardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.pauseClick$ = fromEvent(
-      document.getElementById(this.id) as HTMLButtonElement,
+      document.getElementById('' + this.id) as HTMLButtonElement,
       'click'
     ).pipe(
       map(() => ({
@@ -63,10 +61,9 @@ export class TimerCardComponent implements AfterViewInit {
 
   timer(value: number): Observable<number> {
     return this.tick$.pipe(
-      map(() => 1),
       withLatestFrom(this.pauseClick$),
-      switchMap(([seconds, status]) => (!status.active ? NEVER : of(seconds))),
-      scan((acc, val) => acc - val, value),
+      filter(([_, status]) => status.active),
+      scan((acc, _) => acc - 1, value),
       tap((timeLeft) => (this.progress = (timeLeft * 100) / value)),
       takeWhile(Boolean, true),
       tap(() => {

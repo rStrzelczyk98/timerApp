@@ -1,3 +1,9 @@
 <div class="p-3 d-flex flex-column overflow-y-auto">
-  <app-timer-card *ngFor="let timer of testData" [timeInSeconds]="timer.time" [id]="timer.id"></app-timer-card>
+  <ng-container *ngIf="timers$ |async as timers ;else message">
+    <app-timer-card *ngFor="let timer of timers" [timeInSeconds]="timer.totalTime" [id]="timer.id"
+      [label]="timer.label ?? 'Label'"></app-timer-card>
+  </ng-container>
+  <ng-template #message>
+    <p class="text-center text-white-50">Please add a new timer.</p>
+  </ng-template>
 </div>

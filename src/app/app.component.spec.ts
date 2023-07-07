@@ -9,7 +9,8 @@ import { AppComponent } from './app.component';
 })
 export class MockTimerCard {
   @Input() timeInSeconds!: number;
-  @Input() id!: string;
+  @Input() id!: number;
+  @Input() label!: string;
 }
 
 @Component({

@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, scan } from 'rxjs';
+import { Observable, scan, ReplaySubject } from 'rxjs';
 
 export type Timer = {
   label: string | null;
-  hours: number | null;
-  minutes: number | null;
-  seconds: number | null;
+  totalTime: number;
+  id: number;
 };
 
 @Injectable({
   providedIn: 'root',
 })
 export class TimerService {
-  private timers$ = new Subject<Timer>();
+  private timers$ = new ReplaySubject<Timer>();
 
   constructor() {}
 
