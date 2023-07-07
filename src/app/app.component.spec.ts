@@ -1,13 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AppComponent } from './app.component';
 
 @Component({
   selector: 'app-timer-card',
   template: '',
 })
-export class MockTimerCard {}
+export class MockTimerCard {
+  @Input() timeInSeconds!: number;
+  @Input() id!: string;
+}
 
 @Component({
   selector: 'app-navigation',
