@@ -7,8 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Timer, TimerService } from '../service/timer-service.service';
-import { Observable } from 'rxjs';
+import { TimerService } from '../service/timer-service.service';
 
 @Component({
   selector: 'app-timer-form',
@@ -17,16 +16,15 @@ import { Observable } from 'rxjs';
 })
 export class TimerFormComponent {
   timerForm!: FormGroup;
-  timers$!: Observable<Timer[]>;
 
   constructor(private fb: FormBuilder, private timerService: TimerService) {
     this.createForm();
-    this.timers$ = this.timerService.getTimers();
   }
 
   onSubmit() {
     const { label, hours, minutes, seconds } = this.timerForm.value;
-    this.timerService.addTimer({ label, hours, minutes, seconds });
+    const totalTime = this.totalSeconds(+hours, +minutes, +seconds);
+    this.timerService.addTimer({ label, totalTime, id: new Date().getTime() });
     this.timerForm.reset();
   }
 
@@ -41,7 +39,7 @@ export class TimerFormComponent {
     return (control: AbstractControl): ValidationErrors | null =>
       Object.values(control.value)
         .slice(1)
-        .every((value) => !value)
+        .every((value) => !(Number(value) > 0))
         ? { noValidValues: true }
         : null;
   }
@@ -63,5 +61,9 @@ export class TimerFormComponent {
       ],
     });
     this.timerForm.addValidators(this.validValues());
+  }
+
+  private totalSeconds(h: number = 0, m: number = 0, s: number = 0): number {
+    return h * 60 ** 2 + m * 60 + s;
   }
 }

@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'timePipe',
 })
 export class TimePipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value: number | null): string {
+    if (!value) return '00:00:00';
     const h = Math.floor(value / 60 ** 2);
     const m = Math.floor((value % 60 ** 2) / 60);
     const s = Math.floor(value % 60);
