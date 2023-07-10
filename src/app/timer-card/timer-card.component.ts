@@ -26,8 +26,8 @@ export class TimerCardComponent implements AfterViewInit {
   color: string = 'primary';
   isPaused: Boolean = true;
   isCompleted: Boolean = false;
-  progress: number = 100;
   countdown$!: Observable<number>;
+  progress$!: Observable<number>;
   private pauseClick$!: Observable<Status>;
   private tick$ = timer(0, 1000);
 
@@ -41,6 +41,7 @@ export class TimerCardComponent implements AfterViewInit {
       }))
     );
     this.countdown$ = this.timer(this.timeInSeconds);
+    this.progress$ = this.progressBarValue(this.timeInSeconds);
   }
 
   pauseTimer() {
@@ -54,20 +55,25 @@ export class TimerCardComponent implements AfterViewInit {
 
   reloadTimer() {
     this.isCompleted = false;
-    this.progress = 100;
     if (!this.isPaused) this.pauseTimer();
     this.countdown$ = this.timer(this.timeInSeconds);
+    this.progress$ = this.progressBarValue(this.timeInSeconds);
   }
 
-  timer(value: number): Observable<number> {
+  private timer(value: number): Observable<number> {
     return this.tick$.pipe(
       withLatestFrom(this.pauseClick$),
       filter(([_, status]) => status.active),
       scan((acc, _) => acc - 1, value),
-      tap((timeLeft) => (this.progress = (timeLeft * 100) / value)),
-      takeWhile(Boolean, true),
-      tap(() => {
-        if ((this.isCompleted = !this.progress)) {
+      takeWhile(Boolean, true)
+    );
+  }
+
+  private progressBarValue(value: number) {
+    return this.countdown$.pipe(
+      map((time) => (time * 100) / value),
+      tap((progress) => {
+        if ((this.isCompleted = !progress)) {
           this.alarm();
         }
       })

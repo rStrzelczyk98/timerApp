@@ -13,13 +13,14 @@
       </button>
     </div>
   </div>
-  <p *ngIf="countdown$ | async as countdown;else time" [ngClass]="progress < 30 ?'text-danger' : 'text-white-50'">
+  <p *ngIf="countdown$ | async as countdown;else time"
+    [ngClass]="((progress$ | async) ?? 100) < 30 ?'text-danger' : 'text-white-50'">
     {{countdown |
     timePipe}}</p>
   <ng-template #time>
     <p *ngIf="!isCompleted">{{timeInSeconds | timePipe}}</p>
     <p *ngIf="isCompleted">{{0 | timePipe}}</p>
   </ng-template>
-  <mat-progress-bar mode="determinate" value="{{progress}}"
-    [color]="progress < 30 ? 'warn' : 'accent'"></mat-progress-bar>
+  <mat-progress-bar mode="determinate" value="{{(progress$ | async) ?? 100}}"
+    [color]="((progress$ | async) ?? 100) < 30 ? 'warn' : 'accent'"></mat-progress-bar>
 </div>
