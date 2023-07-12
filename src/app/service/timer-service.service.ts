@@ -9,6 +9,8 @@ import {
   takeWhile,
   withLatestFrom,
   tap,
+  Subject,
+  takeUntil,
 } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
 
@@ -18,6 +20,7 @@ export type Timer = {
   id: number;
   timerStream?: Observable<number>;
   status: BehaviorSubject<Status>;
+  destory: Subject<void>;
   completed: boolean;
 };
 
@@ -60,10 +63,15 @@ export class TimerService {
 
   resetTimerStream(id: number) {
     const timer = this.getTimerById(id);
+    const index = this.findIndex(id);
+    this.timers$.value[index].destory.next();
+    this.timers$.value[index].destory.complete();
+    this.timers$.value[index].status.complete();
     this.addTimer({
       ...timer,
       completed: false,
       timerStream: undefined,
+      destory: new Subject<void>(),
       status: new BehaviorSubject<Status>({ active: false }),
     });
   }
@@ -91,7 +99,9 @@ export class TimerService {
   timerStream(id: number): Observable<number> {
     const timer = this.getTimerById(id);
     return this.tick$.pipe(
+      takeUntil(timer.destory),
       withLatestFrom(timer.status),
+      tap(console.log),
       filter(([_, status]) => status.active),
       scan((acc, _) => acc - 1, timer.totalTime),
       takeWhile(Boolean, true),

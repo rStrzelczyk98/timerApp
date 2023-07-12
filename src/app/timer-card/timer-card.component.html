@@ -5,7 +5,8 @@
       <button mat-raised-button color="basic" (click)="deleteTimer()">
         <i class="bi bi-x fs-2"></i>
       </button>
-      <button mat-raised-button color="basic" (click)="reloadTimer()">
+      <button mat-raised-button color="basic" (click)="reloadTimer() "
+        [disabled]="(progress$ | async) ? false : !isCompleted">
         <i class="bi bi-arrow-clockwise fs-2"></i>
       </button>
       <button [id]="id" mat-raised-button color="{{color}}" (click)="pauseTimer()" [disabled]="isCompleted">

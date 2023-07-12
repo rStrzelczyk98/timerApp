@@ -72,7 +72,9 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   }
 
   private resetStreams() {
-    setTimeout(() => this.ts.resetTimerStream(this.id));
+    setTimeout(() => {
+      this.ts.resetTimerStream(this.id);
+    });
   }
 
   private timerProgressStatus() {

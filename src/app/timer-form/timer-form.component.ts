@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TimerService } from '../service/timer-service.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
 
 @Component({
@@ -32,6 +32,7 @@ export class TimerFormComponent {
       totalTime,
       id,
       status: new BehaviorSubject<Status>({ active: false }),
+      destory: new Subject<void>(),
       completed: false,
     });
     this.timerForm.reset();
