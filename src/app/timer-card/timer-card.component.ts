@@ -18,17 +18,15 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   isCompleted: boolean = false;
   countdown$!: Observable<number>;
   progress$!: Observable<number>;
+  pauseStream$!: Observable<boolean>;
   private isPaused!: boolean;
   private sub!: Subscription;
-  pauseStream$!: Observable<boolean>;
 
   constructor(private ts: TimerService) {}
 
   ngAfterViewInit(): void {
     this.setStreams();
-    this.pauseStream$ = this.ts
-      .getTimerStatus(this.id)
-      .pipe(map(({ active }) => active));
+    setTimeout(() => this.pauseStatus());
   }
 
   ngOnDestroy(): void {
@@ -65,9 +63,9 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
         this.ts.setTimerStream(this.id, this.ts.timerStream(this.id));
       }
       this.timerProgressStatus();
-      this.sub = this.ts
-        .getTimerStatus(this.id)
-        .subscribe(({ active }) => (this.isPaused = active));
+      this.sub = this.pauseStatus().subscribe(
+        (status) => (this.isPaused = status)
+      );
       this.countdown$ = this.ts.getTimerStream(this.id);
       this.progress$ = this.progressBarValue(this.timeInSeconds);
     });
@@ -77,6 +75,12 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.ts.resetTimerStream(this.id);
     });
+  }
+
+  private pauseStatus() {
+    return (this.pauseStream$ = this.ts
+      .getTimerStatus(this.id)
+      .pipe(map(({ active }) => active)));
   }
 
   private timerProgressStatus() {
