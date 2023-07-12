@@ -8,6 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { TimerService } from '../service/timer-service.service';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { Status } from '../timer-card/timer-card.component';
 
 @Component({
   selector: 'app-timer-form',
@@ -24,7 +26,15 @@ export class TimerFormComponent {
   onSubmit() {
     const { label, hours, minutes, seconds } = this.timerForm.value;
     const totalTime = this.totalSeconds(+hours, +minutes, +seconds);
-    this.timerService.addTimer({ label, totalTime, id: new Date().getTime() });
+    const id = new Date().getTime();
+    this.timerService.addTimer({
+      label,
+      totalTime,
+      id,
+      status: new BehaviorSubject<Status>({ active: false }),
+      destory: new Subject<void>(),
+      completed: false,
+    });
     this.timerForm.reset();
   }
 

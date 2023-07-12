@@ -5,22 +5,25 @@
       <button mat-raised-button color="basic" (click)="deleteTimer()">
         <i class="bi bi-x fs-2"></i>
       </button>
-      <button mat-raised-button color="basic" (click)="reloadTimer()">
+      <button mat-raised-button color="basic" (click)="reloadTimer() "
+        [disabled]="(progress$ | async) ? false : !isCompleted">
         <i class="bi bi-arrow-clockwise fs-2"></i>
       </button>
       <button [id]="id" mat-raised-button color="{{color}}" (click)="pauseTimer()" [disabled]="isCompleted">
-        <i class="fs-2" [ngClass]="isPaused ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
+        <i class="fs-2" [ngClass]="!isPaused ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
       </button>
     </div>
   </div>
   <p *ngIf="countdown$ | async as countdown;else time"
-    [ngClass]="((progress$ | async) ?? 100) < 30 ?'text-danger' : 'text-white-50'">
+    [ngClass]="((progress$ | async) ?? 0) < 30 ?'text-danger' : 'text-white-50'">
     {{countdown |
     timePipe}}</p>
   <ng-template #time>
     <p *ngIf="!isCompleted">{{timeInSeconds | timePipe}}</p>
-    <p *ngIf="isCompleted">{{0 | timePipe}}</p>
+    <p *ngIf="isCompleted">{{progress$ | async | timePipe}}</p>
   </ng-template>
-  <mat-progress-bar mode="determinate" value="{{(progress$ | async) ?? 100}}"
+  <mat-progress-bar *ngIf="!isCompleted" mode="determinate" value="{{(progress$ | async) ?? 100}}"
     [color]="((progress$ | async) ?? 100) < 30 ? 'warn' : 'accent'"></mat-progress-bar>
+  <mat-progress-bar *ngIf="isCompleted" mode="determinate" value="0"
+    [color]="0 < 30 ? 'warn' : 'accent'"></mat-progress-bar>
 </div>
