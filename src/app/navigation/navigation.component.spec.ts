@@ -22,7 +22,7 @@ describe('NavigationComponent', () => {
   });
 
   it('should change selected to "add-timer"', () => {
-    expect(component.selected).toEqual('list');
+    expect(component.selected).toEqual('/');
     component.onClick('add-timer');
     expect(component.selected).toEqual('add-timer');
   });

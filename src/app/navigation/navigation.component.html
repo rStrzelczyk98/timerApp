@@ -1,8 +1,8 @@
 <nav mat-tab-nav-bar class="position-fixed bottom-0 w-100" [tabPanel]="tabPanel">
-  <a id="list" mat-tab-link routerLink="" [active]="selected === 'list'" (click)="onClick('list')">
+  <a id="list" mat-tab-link routerLink="" [active]="selected === '/'" (click)="onClick('list')">
     <i class=" bi-list-task fs-2"></i>
   </a>
-  <a id="form" mat-tab-link routerLink="add-timer" [active]="selected !== 'list'" (click)="onClick('add-timer')">
+  <a id="form" mat-tab-link routerLink="add-timer" [active]="selected !== '/'" (click)="onClick('add-timer')">
     <i class="bi bi-plus-lg fs-2"></i>
   </a>
 </nav>
