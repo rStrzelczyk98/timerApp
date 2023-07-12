@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TimerService } from '../service/timer-service.service';
 
 @Component({
   selector: 'app-navigation',
@@ -7,8 +8,12 @@ import { Component } from '@angular/core';
 })
 export class NavigationComponent {
   selected: string = 'list';
-
+  constructor(private ts: TimerService) {}
   onClick(tab: string) {
     this.selected = tab === 'list' ? 'list' : 'add-timer';
+  }
+
+  globalPause() {
+    this.ts.globalPause();
   }
 }

@@ -9,8 +9,9 @@
         [disabled]="(progress$ | async) ? false : !isCompleted">
         <i class="bi bi-arrow-clockwise fs-2"></i>
       </button>
-      <button [id]="id" mat-raised-button color="{{color}}" (click)="pauseTimer()" [disabled]="isCompleted">
-        <i class="fs-2" [ngClass]="!isPaused ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
+      <button [id]="id" mat-raised-button color="{{!(pauseStream$ |async) ? 'primary': 'warn'}}" (click)="pauseTimer()"
+        [disabled]="isCompleted">
+        <i class="fs-2" [ngClass]="!(pauseStream$ |async) ? 'bi bi-play-fill' : 'bi bi-pause' "></i>
       </button>
     </div>
   </div>

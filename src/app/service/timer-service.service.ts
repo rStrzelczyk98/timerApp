@@ -48,6 +48,7 @@ export class TimerService {
 
   removeTimer(id: number) {
     const index = this.findIndex(id);
+    this.reset(index);
     this.timers$.value.splice(index, 1);
   }
 
@@ -64,9 +65,7 @@ export class TimerService {
   resetTimerStream(id: number) {
     const timer = this.getTimerById(id);
     const index = this.findIndex(id);
-    this.timers$.value[index].destory.next();
-    this.timers$.value[index].destory.complete();
-    this.timers$.value[index].status.complete();
+    this.reset(index);
     this.addTimer({
       ...timer,
       completed: false,
@@ -115,6 +114,10 @@ export class TimerService {
     );
   }
 
+  globalPause() {
+    this.timers$.value.forEach((timer) => timer.status.next({ active: false }));
+  }
+
   private findIndex(id: number) {
     return this.timers$.value.findIndex((timer) => timer.id === id);
   }
@@ -128,5 +131,11 @@ export class TimerService {
     new Audio(
       'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav'
     ).play();
+  }
+
+  private reset(index: number) {
+    this.timers$.value[index].destory.next();
+    this.timers$.value[index].destory.complete();
+    this.timers$.value[index].status.complete();
   }
 }

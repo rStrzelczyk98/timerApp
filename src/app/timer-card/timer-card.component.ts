@@ -15,16 +15,20 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   @Input() id!: number;
   @Input() label!: string;
   color: string = 'primary';
-  isPaused!: boolean;
   isCompleted: boolean = false;
   countdown$!: Observable<number>;
   progress$!: Observable<number>;
+  private isPaused!: boolean;
   private sub!: Subscription;
+  pauseStream$!: Observable<boolean>;
 
   constructor(private ts: TimerService) {}
 
   ngAfterViewInit(): void {
     this.setStreams();
+    this.pauseStream$ = this.ts
+      .getTimerStatus(this.id)
+      .pipe(map(({ active }) => active));
   }
 
   ngOnDestroy(): void {
@@ -34,7 +38,6 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   pauseTimer() {
     this.isPaused = !this.isPaused;
     this.ts.updateTimerStatus(this.id, this.isPaused);
-    this.toggleButtonColor();
   }
 
   deleteTimer() {
@@ -65,7 +68,6 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
       this.sub = this.ts
         .getTimerStatus(this.id)
         .subscribe(({ active }) => (this.isPaused = active));
-      this.toggleButtonColor();
       this.countdown$ = this.ts.getTimerStream(this.id);
       this.progress$ = this.progressBarValue(this.timeInSeconds);
     });
@@ -79,9 +81,5 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
 
   private timerProgressStatus() {
     this.isCompleted = this.ts.getCompletedStatus(this.id);
-  }
-
-  private toggleButtonColor() {
-    this.color = !this.isPaused ? 'primary' : 'warn';
   }
 }
