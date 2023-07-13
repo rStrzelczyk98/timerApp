@@ -14,9 +14,10 @@ import {
   map,
 } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export type Timer = {
-  label: string | null;
+  label: string;
   totalTime: number;
   id: number;
   timerStream?: Observable<number>;
@@ -30,7 +31,7 @@ export type Timer = {
 })
 export class TimerService {
   private timers$ = new BehaviorSubject<Timer[]>([]);
-  
+
   private globalPause$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private tick$: Observable<number> = timer(0, 1000).pipe(
@@ -38,6 +39,8 @@ export class TimerService {
     filter(([tick, pause]) => !pause),
     map(([tick, _]) => tick)
   );
+
+  constructor(private sb: MatSnackBar) {}
 
   getTimers(): Observable<Timer[]> {
     return this.timers$.asObservable();
@@ -118,6 +121,7 @@ export class TimerService {
         if (!time) {
           this.setCompletedStatus(id, true);
           this.alarm();
+          this.notification(timer.label);
         }
       }),
       shareReplay(1)
@@ -147,5 +151,12 @@ export class TimerService {
     this.timers$.value[index].destory.next();
     this.timers$.value[index].destory.complete();
     this.timers$.value[index].status.complete();
+  }
+
+  private notification(message: string) {
+    this.sb.open(`( ${message} ) Countdown Completed!`, undefined, {
+      duration: 1000,
+      verticalPosition: 'top',
+    });
   }
 }

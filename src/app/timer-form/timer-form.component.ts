@@ -28,7 +28,7 @@ export class TimerFormComponent {
     const totalTime = this.totalSeconds(+hours, +minutes, +seconds);
     const id = new Date().getTime();
     this.timerService.addTimer({
-      label,
+      label: label ?? 'new timer',
       totalTime,
       id,
       status: new BehaviorSubject<Status>({ active: false }),

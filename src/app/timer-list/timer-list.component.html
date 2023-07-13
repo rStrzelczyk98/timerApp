@@ -2,7 +2,7 @@
   <ng-container *ngIf="timers$ |async as timers">
     <ng-container *ngIf="timers.length;else message">
       <app-timer-card *ngFor="let timer of timers" [timeInSeconds]="timer.totalTime" [id]="timer.id"
-        [label]="timer.label ?? 'Label'"></app-timer-card>
+        [label]="timer.label"></app-timer-card>
     </ng-container>
   </ng-container>
   <ng-template #message>
