@@ -11,6 +11,7 @@ import {
   tap,
   Subject,
   takeUntil,
+  map,
 } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
 
@@ -30,10 +31,20 @@ export type Timer = {
 export class TimerService {
   private timers$ = new BehaviorSubject<Timer[]>([]);
 
-  private tick$: Observable<number> = timer(0, 1000);
+  private globalPause$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  private tick$: Observable<number> = timer(0, 1000).pipe(
+    withLatestFrom(this.globalPause$),
+    filter(([tick, pause]) => !pause),
+    map(([tick, _]) => tick)
+  );
 
   getTimers(): Observable<Timer[]> {
     return this.timers$.asObservable();
+  }
+
+  getGlobalPause() {
+    return this.globalPause$.asObservable().pipe(shareReplay(1));
   }
 
   addTimer(timer: Timer) {
@@ -100,7 +111,6 @@ export class TimerService {
     return this.tick$.pipe(
       takeUntil(timer.destory),
       withLatestFrom(timer.status),
-      tap(console.log),
       filter(([_, status]) => status.active),
       scan((acc, _) => acc - 1, timer.totalTime),
       takeWhile(Boolean, true),
@@ -114,8 +124,8 @@ export class TimerService {
     );
   }
 
-  globalPause() {
-    this.timers$.value.forEach((timer) => timer.status.next({ active: false }));
+  globalPause(value: boolean = true) {
+    this.globalPause$.next(value ? !this.globalPause$.value : false);
   }
 
   private findIndex(id: number) {

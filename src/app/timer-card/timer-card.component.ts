@@ -19,10 +19,13 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   countdown$!: Observable<number>;
   progress$!: Observable<number>;
   pauseStream$!: Observable<boolean>;
+  globalPause$!: Observable<boolean>;
   private isPaused!: boolean;
   private sub!: Subscription;
 
-  constructor(private ts: TimerService) {}
+  constructor(private ts: TimerService) {
+    this.globalPause$ = this.ts.getGlobalPause();
+  }
 
   ngAfterViewInit(): void {
     this.setStreams();

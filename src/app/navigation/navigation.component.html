@@ -6,7 +6,7 @@
     <i class="bi bi-plus-lg fs-2"></i>
   </a>
 </nav>
-<button id="pause-btn" mat-mini-fab color="primary" (click)="globalPause()">
-  <i class="fs-2 bi bi-pause"></i>
+<button id="pause-btn" mat-mini-fab color="{{!(pauseStream$ |async) ? 'warn': 'primary'}}" (click)="globalPause()">
+  <i class="fs-2" [ngClass]="!(pauseStream$ |async) ? 'bi bi-pause' : 'bi bi-play-fill'"></i>
 </button>
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
