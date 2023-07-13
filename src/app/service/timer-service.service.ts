@@ -31,7 +31,7 @@ export type Timer = {
 })
 export class TimerService {
   private timers$ = new BehaviorSubject<Timer[]>([]);
-
+  
   private globalPause$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private tick$: Observable<number> = timer(0, 1000).pipe(
