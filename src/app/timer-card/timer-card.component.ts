@@ -15,16 +15,21 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   @Input() id!: number;
   @Input() label!: string;
   color: string = 'primary';
-  isPaused!: boolean;
   isCompleted: boolean = false;
   countdown$!: Observable<number>;
   progress$!: Observable<number>;
+  pauseStream$!: Observable<boolean>;
+  globalPause$!: Observable<boolean>;
+  private isPaused!: boolean;
   private sub!: Subscription;
 
-  constructor(private ts: TimerService) {}
+  constructor(private ts: TimerService) {
+    this.globalPause$ = this.ts.getGlobalPause();
+  }
 
   ngAfterViewInit(): void {
     this.setStreams();
+    setTimeout(() => this.pauseStatus());
   }
 
   ngOnDestroy(): void {
@@ -34,7 +39,6 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
   pauseTimer() {
     this.isPaused = !this.isPaused;
     this.ts.updateTimerStatus(this.id, this.isPaused);
-    this.toggleButtonColor();
   }
 
   deleteTimer() {
@@ -62,10 +66,9 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
         this.ts.setTimerStream(this.id, this.ts.timerStream(this.id));
       }
       this.timerProgressStatus();
-      this.sub = this.ts
-        .getTimerStatus(this.id)
-        .subscribe(({ active }) => (this.isPaused = active));
-      this.toggleButtonColor();
+      this.sub = this.pauseStatus().subscribe(
+        (status) => (this.isPaused = status)
+      );
       this.countdown$ = this.ts.getTimerStream(this.id);
       this.progress$ = this.progressBarValue(this.timeInSeconds);
     });
@@ -77,11 +80,13 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private timerProgressStatus() {
-    this.isCompleted = this.ts.getCompletedStatus(this.id);
+  private pauseStatus() {
+    return (this.pauseStream$ = this.ts
+      .getTimerStatus(this.id)
+      .pipe(map(({ active }) => active)));
   }
 
-  private toggleButtonColor() {
-    this.color = !this.isPaused ? 'primary' : 'warn';
+  private timerProgressStatus() {
+    this.isCompleted = this.ts.getCompletedStatus(this.id);
   }
 }

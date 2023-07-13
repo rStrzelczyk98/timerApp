@@ -11,6 +11,7 @@ import {
   tap,
   Subject,
   takeUntil,
+  map,
 } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
 
@@ -29,11 +30,21 @@ export type Timer = {
 })
 export class TimerService {
   private timers$ = new BehaviorSubject<Timer[]>([]);
+  
+  private globalPause$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private tick$: Observable<number> = timer(0, 1000);
+  private tick$: Observable<number> = timer(0, 1000).pipe(
+    withLatestFrom(this.globalPause$),
+    filter(([tick, pause]) => !pause),
+    map(([tick, _]) => tick)
+  );
 
   getTimers(): Observable<Timer[]> {
     return this.timers$.asObservable();
+  }
+
+  getGlobalPause() {
+    return this.globalPause$.asObservable().pipe(shareReplay(1));
   }
 
   addTimer(timer: Timer) {
@@ -48,6 +59,7 @@ export class TimerService {
 
   removeTimer(id: number) {
     const index = this.findIndex(id);
+    this.reset(index);
     this.timers$.value.splice(index, 1);
   }
 
@@ -64,9 +76,7 @@ export class TimerService {
   resetTimerStream(id: number) {
     const timer = this.getTimerById(id);
     const index = this.findIndex(id);
-    this.timers$.value[index].destory.next();
-    this.timers$.value[index].destory.complete();
-    this.timers$.value[index].status.complete();
+    this.reset(index);
     this.addTimer({
       ...timer,
       completed: false,
@@ -101,7 +111,6 @@ export class TimerService {
     return this.tick$.pipe(
       takeUntil(timer.destory),
       withLatestFrom(timer.status),
-      tap(console.log),
       filter(([_, status]) => status.active),
       scan((acc, _) => acc - 1, timer.totalTime),
       takeWhile(Boolean, true),
@@ -113,6 +122,10 @@ export class TimerService {
       }),
       shareReplay(1)
     );
+  }
+
+  globalPause(value: boolean = true) {
+    this.globalPause$.next(value ? !this.globalPause$.value : false);
   }
 
   private findIndex(id: number) {
@@ -128,5 +141,11 @@ export class TimerService {
     new Audio(
       'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav'
     ).play();
+  }
+
+  private reset(index: number) {
+    this.timers$.value[index].destory.next();
+    this.timers$.value[index].destory.complete();
+    this.timers$.value[index].status.complete();
   }
 }

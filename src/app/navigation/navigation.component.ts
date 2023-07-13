@@ -1,5 +1,8 @@
 import { Component, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
+import { TimerService } from '../service/timer-service.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-navigation',
@@ -8,8 +11,10 @@ import { Router } from '@angular/router';
 })
 export class NavigationComponent implements DoCheck {
   selected: string = '/';
-
-  constructor(private router: Router) {}
+  pauseStream$: Observable<boolean>;
+  constructor(private router: Router, private ts: TimerService) {
+        this.pauseStream$ = this.ts.getGlobalPause();
+  }
 
   ngDoCheck(): void {
     this.selected = this.router.url;
@@ -17,5 +22,9 @@ export class NavigationComponent implements DoCheck {
 
   onClick(tab: string) {
     this.selected = tab ? tab : 'add-timer';
+  }
+
+  globalPause() {
+    this.ts.globalPause();
   }
 }
