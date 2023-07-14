@@ -30,8 +30,10 @@ export type Timer = {
 })
 export class TimerService {
   private timers$ = new BehaviorSubject<Timer[]>([]);
-  
+
   private globalPause$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  private trash$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private tick$: Observable<number> = timer(0, 1000).pipe(
     withLatestFrom(this.globalPause$),
@@ -57,10 +59,23 @@ export class TimerService {
     }
   }
 
-  removeTimer(id: number) {
-    const index = this.findIndex(id);
+  rearrangeTimers(previous: number, current: number) {
+    const temp = this.timers$.value[previous];
+    this.timers$.value[previous] = this.timers$.value[current];
+    this.timers$.value[current] = temp;
+  }
+
+  removeTimer(index: number) {
     this.reset(index);
     this.timers$.value.splice(index, 1);
+  }
+
+  toggleTrash() {
+    this.trash$.next(!this.trash$.value);
+  }
+
+  displayTrash() {
+    return this.trash$.asObservable();
   }
 
   updateTimerStatus(id: number, value: boolean) {

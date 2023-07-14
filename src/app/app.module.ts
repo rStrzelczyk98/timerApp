@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,7 +24,7 @@ import { TimerListComponent } from './timer-list/timer-list.component';
     TimerCardComponent,
     TimePipe,
     TimerListComponent,
-    TimerFormComponent
+    TimerFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +37,7 @@ import { TimerListComponent } from './timer-list/timer-list.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
