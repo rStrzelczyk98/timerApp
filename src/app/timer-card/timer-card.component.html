@@ -2,9 +2,6 @@
   <div class="d-flex align-items-center">
     <p class="m-0 fw-light">{{label | titlecase}}</p>
     <div class="ms-auto btn-group">
-      <button mat-raised-button color="basic" (click)="deleteTimer()">
-        <i class="bi bi-x fs-2"></i>
-      </button>
       <button mat-raised-button color="basic" (click)="reloadTimer() "
         [disabled]="(progress$ | async) ? false : !isCompleted">
         <i class="bi bi-arrow-clockwise fs-2"></i>
@@ -28,4 +25,3 @@
   <mat-progress-bar *ngIf="isCompleted" mode="determinate" value="0"
     [color]="0 < 30 ? 'warn' : 'accent'"></mat-progress-bar>
 </div>
-

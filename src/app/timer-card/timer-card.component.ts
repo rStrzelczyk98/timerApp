@@ -41,10 +41,6 @@ export class TimerCardComponent implements AfterViewInit, OnDestroy {
     this.ts.updateTimerStatus(this.id, this.isPaused);
   }
 
-  deleteTimer() {
-    this.ts.removeTimer(this.id);
-  }
-
   reloadTimer() {
     if (!this.isPaused) this.pauseTimer();
     this.ts.updateTimerStatus(this.id, false);
