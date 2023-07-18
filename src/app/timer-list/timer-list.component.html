@@ -1,11 +1,19 @@
-<div class="p-3 d-flex flex-column overflow-y-auto">
-  <ng-container *ngIf="timers$ |async as timers">
-    <ng-container *ngIf="timers.length;else message">
-      <app-timer-card *ngFor="let timer of timers" [timeInSeconds]="timer.totalTime" [id]="timer.id"
-        [label]="timer.label ?? 'Label'"></app-timer-card>
+<ng-container cdkDropListGroup>
+  <div class="p-3 d-flex flex-column overflow-y-auto" cdkDropList (cdkDropListDropped)="drop($event)">
+    <ng-container *ngIf="timers$ |async as timers">
+      <ng-container *ngIf="timers.length;else message">
+        <app-timer-card *ngFor="let timer of timers" [timeInSeconds]="timer.totalTime" [id]="timer.id"
+          [label]="timer.label ?? 'Label'" cdkDrag (cdkDragStarted)="toggleTrash()"
+          (cdkDragDropped)="toggleTrash()"></app-timer-card>
+      </ng-container>
     </ng-container>
-  </ng-container>
-  <ng-template #message>
-    <p class="text-center text-white-50">Please add a new timer.</p>
-  </ng-template>
-</div>
+    <ng-template #message>
+      <p class="text-center text-white-50">Please add a new timer.</p>
+    </ng-template>
+  </div>
+  <div [ngClass]="(trash$ | async) ? 'show-trash' : '' "
+    class="trash text-danger d-flex flex-nowrap align-items-center mx-3 overflow-hidden" cdkDropList
+    (cdkDropListDropped)="remove($event)">
+    <p class="m-0 w-100 text-center flex-shrink-0"><i class="bi bi-trash pe-2"></i>Remove Timer</p>
+  </div>
+</ng-container>
