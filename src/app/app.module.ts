@@ -16,6 +16,7 @@ import { TimerFormComponent } from './timer-form/timer-form.component';
 import { TimerCardComponent } from './timer-card/timer-card.component';
 import { TimePipe } from './pipe/time.pipe';
 import { TimerListComponent } from './timer-list/timer-list.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { TimerListComponent } from './timer-list/timer-list.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
     DragDropModule,
   ],
   providers: [],
