@@ -60,9 +60,11 @@ export class TimerService {
   }
 
   rearrangeTimers(previous: number, current: number) {
-    const temp = this.timers$.value[previous];
-    this.timers$.value[previous] = this.timers$.value[current];
-    this.timers$.value[current] = temp;
+    const timers = this.timers$.value;
+    const temp = timers[previous];
+    timers[previous] = timers[current];
+    timers[current] = temp;
+    this.timers$.next(timers);
   }
 
   removeTimer(index: number) {
