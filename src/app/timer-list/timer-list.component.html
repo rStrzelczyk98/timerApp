@@ -3,7 +3,7 @@
     <ng-container *ngIf="timers$ |async as timers">
       <ng-container *ngIf="timers.length;else message">
         <app-timer-card *ngFor="let timer of timers" [timeInSeconds]="timer.totalTime" [id]="timer.id"
-          [label]="timer.label ?? 'Label'" cdkDrag (cdkDragStarted)="toggleTrash()"
+          [label]="timer.label" cdkDrag (cdkDragStarted)="toggleTrash()"
           (cdkDragDropped)="toggleTrash()"></app-timer-card>
       </ng-container>
     </ng-container>
