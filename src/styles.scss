@@ -23,3 +23,23 @@ body {
   scale: 0.9;
   transition: transform 100ms ease-out;
 }
+
+.trash {
+  max-height: 3rem;
+  position: relative;
+  top: -3rem;
+  gap: 1rem;
+  border-radius: 0.25rem;
+  background: rgba(109, 19, 13, 0.466);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 2rem rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+  color: #f44336;
+  border: 0.0625rem solid #f44336;
+  opacity: 0;
+  transition: opacity 100ms ease-in;
+}
+.cdk-drop-list-dragging.trash {
+  background: rgba(187, 21, 9, 0.466);
+}

@@ -10,6 +10,7 @@ import {
 import { TimerService } from '../service/timer-service.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Status } from '../timer-card/timer-card.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-timer-form',
@@ -19,7 +20,11 @@ import { Status } from '../timer-card/timer-card.component';
 export class TimerFormComponent {
   timerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private timerService: TimerService) {
+  constructor(
+    private fb: FormBuilder,
+    private timerService: TimerService,
+    private route: Router
+  ) {
     this.createForm();
   }
 
@@ -36,6 +41,7 @@ export class TimerFormComponent {
       completed: false,
     });
     this.timerForm.reset();
+    this.route.navigate(['/']);
   }
 
   private typeValidator(): ValidatorFn {
